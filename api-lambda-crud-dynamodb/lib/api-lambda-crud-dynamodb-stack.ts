@@ -49,7 +49,7 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
 
     const deleteOneFn = new lambda.NodejsFunction(
       this,
-      `${RESOURCE_PREFIX}deleteOneFn`,
+      `${RESOURCE_PREFIX}DeleteOneFn`,
       {
         ...fnProps,
         entry: join(__dirname, '../src/delete-one.ts'),
@@ -58,7 +58,7 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
 
     const getAllFn = new lambda.NodejsFunction(
       this,
-      `${RESOURCE_PREFIX}getAllFn`,
+      `${RESOURCE_PREFIX}GetAllFn`,
       {
         ...fnProps,
         entry: join(__dirname, '../src/get-all.ts'),
@@ -67,7 +67,7 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
 
     const getOneFn = new lambda.NodejsFunction(
       this,
-      `${RESOURCE_PREFIX}getOneFn`,
+      `${RESOURCE_PREFIX}GetOneFn`,
       {
         ...fnProps,
         entry: join(__dirname, '../src/get-one.ts'),
@@ -76,17 +76,17 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
 
     const updateOneFn = new lambda.NodejsFunction(
       this,
-      `${RESOURCE_PREFIX}updateOneFn`,
+      `${RESOURCE_PREFIX}UpdateOneFn`,
       {
         ...fnProps,
         entry: join(__dirname, '../src/update-one.ts'),
       }
     );
 
-    itemsTable.grantReadWriteData(createFn);
-    itemsTable.grantReadWriteData(deleteOneFn);
-    itemsTable.grantReadWriteData(getAllFn);
+    itemsTable.grantWriteData(createFn);
+    itemsTable.grantWriteData(deleteOneFn);
+    itemsTable.grantReadData(getAllFn);
     itemsTable.grantReadWriteData(getOneFn);
-    itemsTable.grantReadWriteData(updateOneFn);
+    itemsTable.grantWriteData(updateOneFn);
   }
 }
