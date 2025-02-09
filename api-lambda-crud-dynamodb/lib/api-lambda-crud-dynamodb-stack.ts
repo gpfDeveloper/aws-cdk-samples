@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 
@@ -86,7 +87,27 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
     itemsTable.grantWriteData(createFn);
     itemsTable.grantWriteData(deleteOneFn);
     itemsTable.grantReadData(getAllFn);
-    itemsTable.grantReadWriteData(getOneFn);
+    itemsTable.grantReadData(getOneFn);
     itemsTable.grantWriteData(updateOneFn);
+
+    const getAllInt = new apigateway.LambdaIntegration(getAllFn);
+    const createInt = new apigateway.LambdaIntegration(createFn);
+    const getOneInt = new apigateway.LambdaIntegration(getOneFn);
+    const deleteOneInt = new apigateway.LambdaIntegration(deleteOneFn);
+    const updateOneInt = new apigateway.LambdaIntegration(updateOneFn);
+
+    const restApi = new apigateway.RestApi(this, `${RESOURCE_PREFIX}Gateway`, {
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS,
+      },
+    });
+    const itemsApi = restApi.root.addResource('items');
+    itemsApi.addMethod('GET', getAllInt);
+    itemsApi.addMethod('POST', createInt);
+    const itemApi = itemsApi.addResource('{id}');
+    itemApi.addMethod('GET', getOneInt);
+    itemApi.addMethod('DELETE', deleteOneInt);
+    itemApi.addMethod('PATCH', updateOneInt);
   }
 }
