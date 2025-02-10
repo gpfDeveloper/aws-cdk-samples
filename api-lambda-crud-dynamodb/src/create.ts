@@ -23,5 +23,13 @@ export const handler = async (event: any = {}): Promise<any> => {
   };
 
   const ret = await db.put(params);
-  return { statusCode: 201, body: JSON.stringify(ret) };
+  return {
+    statusCode: 201,
+    body: JSON.stringify(ret),
+    headers: {
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+    },
+  };
 };

@@ -25,11 +25,22 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     const response = await db.get(params);
     if (response.Item) {
-      return { statusCode: 200, body: JSON.stringify(response.Item) };
+      return {
+        statusCode: 200,
+        body: JSON.stringify(response.Item),
+        headers: {
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': '*',
+        },
+      };
     } else {
       return { statusCode: 404 };
     }
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify(dbError),
+    };
   }
 };

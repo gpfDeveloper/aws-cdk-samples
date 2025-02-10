@@ -49,8 +49,19 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     await db.update(params);
-    return { statusCode: 204, body: '' };
+    return {
+      statusCode: 204,
+      body: '',
+      headers: {
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+      },
+    };
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify(dbError),
+    };
   }
 };

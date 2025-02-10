@@ -100,6 +100,7 @@ export class ApiLambdaCrudDynamodbStack extends cdk.Stack {
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
         allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
       },
     });
     const itemsApi = restApi.root.addResource('items');

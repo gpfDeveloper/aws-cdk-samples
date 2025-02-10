@@ -24,8 +24,19 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     await db.delete(params);
-    return { statusCode: 200, body: '' };
+    return {
+      statusCode: 200,
+      body: '',
+      headers: {
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+      },
+    };
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify(dbError),
+    };
   }
 };
